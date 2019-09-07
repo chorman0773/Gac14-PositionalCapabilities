@@ -76,7 +76,7 @@ public class PositionCapabilityManager implements ICapabilitySerializable<ListNB
 
 	@Override
 	public ListNBT serializeNBT() {
-		return holder.entrySet().stream().map(PositionCapabilityManager::serializeEntry).collect(ListNBT::new, ListNBT::add, ListNBT::addAll);
+		return holder.entrySet().stream().map(PositionCapabilityManager::serializeEntry).filter(CompoundNBT::isEmpty).collect(ListNBT::new, ListNBT::add, ListNBT::addAll);
 	}
 
 	@Override
@@ -86,7 +86,8 @@ public class PositionCapabilityManager implements ICapabilitySerializable<ListNB
 		for(INBT n:nbt) {
 			CompoundNBT comp = (CompoundNBT)n;
 			BlockPos pos = NBTUtil.readBlockPos(comp.getCompound("__pos"));
-			
+			PositionCapabilityHolder capHolder = getOrCreate(pos);
+			capHolder.deserializeNBT(comp);
 		}
 	}
 
