@@ -15,6 +15,11 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
+/**
+ * Small Library for implementing Positonal Capabilities.
+ * @author chorm
+ *
+ */
 @Mod("gac14-poscaps")
 public class Gac14PosCaps {
 	

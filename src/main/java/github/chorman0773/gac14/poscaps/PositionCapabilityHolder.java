@@ -7,6 +7,11 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.CapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 
+/**
+ * Proxy Object which is bound to a particular position in a world, and can have Capabilities Attached to it.
+ * @author chorm
+ *
+ */
 public class PositionCapabilityHolder extends CapabilityProvider<PositionCapabilityHolder> implements INBTSerializable<CompoundNBT> {
 	private World w;
 	private BlockPos pos;

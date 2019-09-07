@@ -3,6 +3,8 @@ package github.chorman0773.gac14.poscaps;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
@@ -29,17 +31,28 @@ public class PositionCapabilityManager implements ICapabilitySerializable<ListNB
 	@CapabilityInject(PositionCapabilityManager.class)
 	private static final Capability<PositionCapabilityManager> POSCAPMAN_CAP = null;
 	
-
-	public static <T> LazyOptional<T> getBlockCapability(World w,BlockPos pos,Capability<T> cap,Direction side){
+	
+	/**
+	 * Obtains an object for the capabilitiy designated by cap in the proxy object given the World Position. 
+	 * If the chunk the block is in has been unsubscribed from Positional Capabilities, returns an empty optional.
+	 * Otherwise, if this is the first time in the world that a given position has been referenced by this method,
+	 *  a new proxy object is created. This will cause handlers for {@link AttachCapabilities}&lt;PositionCapabilityHolder&gt; to fire.
+	 * After obtaining the proxy object p, and creating it if necessary, returns p.getCapability(cap,side).
+	 */
+	public static <T> LazyOptional<T> getBlockCapability(World w,BlockPos pos,Capability<T> cap,@Nullable Direction side){
 		Chunk c = w.getChunkAt(pos);
 		return c.getCapability(POSCAPMAN_CAP).map(p->p.getOrCreate(pos)).map(h->h.getCapability(cap,side)).orElseGet(LazyOptional::empty);
 	}
 	
+	/**
+	 * Unsided version of {@link #getBlockCapability(World, BlockPos, Capability, Direction)}.
+	 * The call getBlockCapability(w,pos,cap) is equivalent to the call getBlockCapability(w,pos,cap,null).
+	 */
 	public static <T> LazyOptional<T> getBlockCapability(World w,BlockPos pos,Capability<T> cap){
 		return getBlockCapability(w,pos,cap,null);
 	}
 	
-	public PositionCapabilityManager(World w,Chunk c) {
+	PositionCapabilityManager(World w,Chunk c) {
 		this.w = w;
 		this.c = c;
 	}
